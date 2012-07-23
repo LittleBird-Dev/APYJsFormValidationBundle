@@ -17,15 +17,15 @@ class RepeatedFieldListener
 {
     public function onJsfvPostProcess(PostProcessEvent $event)
     {
-        $formFields = $event->getFormView()->getChildren();
+        $formFields = $event->getFormView()->all();
         $fieldsConstraints = $event->getFieldsConstraints();
 
         foreach ($formFields as $formField) {
-            if (in_array('repeated', $formField->get('types'))) {
-                $formFieldId = $formField->get('id');
+            if (in_array('repeated', $formField->getVar('types'))) {
+                $formFieldId = $formField->getVar('id');
 
                 // Get the real fields name of the repeated type form
-                $repeatedNames = array_keys($formField->get('value'));
+                $repeatedNames = array_keys($formField->getVar('value'));
                 $formFieldId_first = $formFieldId.'_'.$repeatedNames[0];
                 $formFieldId_second = $formFieldId.'_'.$repeatedNames[1];
 
@@ -41,11 +41,11 @@ class RepeatedFieldListener
                 }
 
                 // Get invalid message from the form
-                $invalid_message = $formField->get('invalid_message');
-                foreach ($formField->get('invalid_message_parameters') as $invalid_message_parameter => $value){
+                $invalid_message = $formField->getVar('invalid_message');
+                foreach ($formField->getVar('invalid_message_parameters') as $invalid_message_parameter => $value){
                     $invalid_message = str_replace($invalid_message_parameter,'{{ '.$invalid_message_parameter.' }}',$invalid_message);
                 }
-                $invalid_message_parameters = json_encode($formField->get('invalid_message_parameters'));
+                $invalid_message_parameters = json_encode($formField->getVar('invalid_message_parameters'));
 
                 $fieldsConstraints->addFieldConstraint($formFieldId_second, array(
                     'name' => 'Repeated',

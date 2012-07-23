@@ -20,7 +20,7 @@ class FieldsConstraints {
     }
 
     public function hasFieldConstraints($fieldName) {
-        return isset($this->constraints[$fieldName]) && !empty($this->constraints[$fieldName]);
+        return !empty($this->constraints) && isset($this->constraints[$fieldName]) && !empty($this->constraints[$fieldName]);
     }
 
     public function getFieldConstraints($fieldName) {
@@ -50,6 +50,6 @@ class FieldsConstraints {
     }
 
     public function hasLibrary($contraintName) {
-        return isset($this->libraries[$contraintName]) && !empty($this->libraries[$contraintName]);
+        return !empty($this->libraries) && isset($this->libraries[$contraintName]) && !empty($this->libraries[$contraintName]);
     }
 }

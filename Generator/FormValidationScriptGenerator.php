@@ -71,9 +71,9 @@ class FormValidationScriptGenerator {
             // we look through each field of the form
             foreach ($formView->getChildren() as $formField) {
                 // we look for constraints for the field
-                if (isset($metadata->properties[$formField->get('name')])) {
+                if (isset($metadata->properties[$formField->getName()])) {
                     // we look through each field constraint
-                    foreach ($metadata->properties[$formField->get('name')]->getConstraints() as $contraint) {
+                    foreach ($metadata->properties[$formField->getName()]->getConstraints() as $contraint) {
 
                         $contraintName = end((explode(chr(92), get_class($contraint))));
                         $contraintProperties = get_object_vars($contraint);
@@ -101,7 +101,7 @@ class FormValidationScriptGenerator {
                             $constraintParameters[] = "$variable:$value";
                         }
 
-                        $fieldsConstraints->addFieldConstraint($formField->get('id'), array(
+                        $fieldsConstraints->addFieldConstraint($formField->getVar('id'), array(
                             'name' => $contraintName,
                             'parameters' => '{'.join(', ',$constraintParameters).'}'
                         ));
@@ -133,7 +133,7 @@ class FormValidationScriptGenerator {
             $javascript_framework = strtolower($this->container->getParameter('apy_js_form_validation.javascript_framework'));
             $template = $this->container->get('templating')->render("{$validation_bundle}:Frameworks:JsFormValidation.js.{$javascript_framework}.twig",
                 array(
-                    'formName'=>$formView->get('name'),
+                    'formName'=>$formView->getName(),
                     'fieldConstraints'=>$fieldsConstraints->getFieldsConstraints(),
                     'librairyCalls'=>$fieldsConstraints->getLibraries(),
                     'check_modes'=>$check_modes
